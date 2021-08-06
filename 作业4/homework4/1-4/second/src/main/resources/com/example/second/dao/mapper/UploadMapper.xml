@@ -1,0 +1,18 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.second.dao.UploadDao">
+
+    <insert id="insertFile" parameterType="com.example.second.entity.TeacherFile">
+        insert into file (name,newname,uid,url) values (#{name},#{newname},#{uid},#{url})
+    </insert>
+
+    <select id="findAllFiles" parameterType="com.example.second.entity.User" resultType="com.example.second.entity.TeacherFile">
+        select * from file
+    </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.example.second.entity.TeacherFile">
+        select * from file where id=#{id}
+    </select>
+
+</mapper>

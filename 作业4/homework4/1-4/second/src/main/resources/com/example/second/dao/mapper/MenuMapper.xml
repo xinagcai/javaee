@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.second.dao.MenuDao">
+    <resultMap id="BaseResultMap" type="com.example.second.entity.Menu">
+    <!--property表示的是数据库的字段名，而column表示的是查询时使用的字段名-->
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="pattern" property="pattern" jdbcType="VARCHAR" />
+        <result column="component" property="component" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="enabled" property="enabled" jdbcType="BIT" />
+        <result column="parentId" property="parentId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="MenuWithRole" type="com.example.second.entity.Menu" extends="BaseResultMap">
+        <collection property="roles" ofType="com.example.second.entity.Role">
+            <id column="rid" property="id"/>
+            <result property="name" column="rname"/>
+            <result property="nameZh" column="rnameZh"/>
+        </collection>
+    </resultMap>
+    
+    <resultMap id="menu" type="com.example.second.entity.Menu" extends="BaseResultMap">
+        <collection property="children" ofType="com.example.second.entity.Menu">
+            <id column="id2" property="id" jdbcType="INTEGER" />
+            <result column="pattern2" property="pattern" jdbcType="VARCHAR" />
+            <result column="component2" property="component" jdbcType="VARCHAR" />
+            <result column="name2" property="name" jdbcType="VARCHAR" />
+            <result column="enabled2" property="enabled" jdbcType="BIT" />
+            <result column="parentId2" property="parentId" jdbcType="INTEGER" />
+        </collection>
+
+    </resultMap>
+
+    <select id="getAllMenusWithRole" resultMap="MenuWithRole">
+        select m.*,r.name as rname,r.nameZh as rnameZh,r.id as rid from role r left join menu_role mr on r.id = mr.rid left join menu m on m.id = mr.mid
+    </select>
+
+
+    <select id="getMenusByUserId" resultMap="menu">
+        select m1.*,m2.id as id2,m2.pattern as pattern2, m2.parentId as parentId2,m2.name as name2,m2.component as component2,m2.enabled as enabled2 from menu m1 left join menu m2 on m1.id = m2.parentId left join menu_role mr on mr.mid = m2.id left join user_role ur on ur.rid = mr.rid where ur.uid = #{id} and m2.enabled = true
+    </select>
+</mapper>    

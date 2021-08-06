@@ -1,0 +1,10 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.second.dao.StudentCountDao">
+
+    <update id="addCount" parameterType="java.lang.Integer">
+        update student_count set count = #{count}
+    </update>
+
+</mapper>    
